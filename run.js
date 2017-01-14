@@ -9,7 +9,7 @@ var tone_analyzer = new ToneAnalyzerV3({
   version_date: '2016-05-19'
 });
 
-tone_analyzer.tone({ text: 'I hate dislike  Watson Developer Cloud!' },
+tone_analyzer.tone({ text: 'I hate dislike  Watson Developer Cloud! I am very confident in my node abilities' },
   function(err, tone) {
     if (err)
       console.log(err);
@@ -17,10 +17,10 @@ tone_analyzer.tone({ text: 'I hate dislike  Watson Developer Cloud!' },
       //console.log(JSON.stringify(tone, null, 2));
       analysis = JSON.stringify(tone, null, 2);
       //console.log(analysis);
-      printAnger(analysis);
+      pushJSONToArray(analysis);
 });
 
-function printAnger(jsonObj) {
+function pushJSONToArray(jsonObj) {
     JSON.parse(jsonObj, (key, value) => {
         if (key == 'score') {
           results.push(value);
@@ -29,6 +29,6 @@ function printAnger(jsonObj) {
     //console.log(results);
 
     results.forEach((value) => {
-      console.log("Watson says: " + value + "\n");
+      console.log("Watson says: " + value + "!\n");
     })
 }
