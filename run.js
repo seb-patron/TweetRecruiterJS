@@ -3,7 +3,8 @@ const ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
 let analysis;
 const keywords = ['job', 'jobs', 'searching', 'internship', 'intern', 'work',
   'opennings', '?'
-]
+];
+const tweetArray = [];
 const results = [];
 const ANGER = 0;
 const DISGUST = 1;
@@ -38,23 +39,38 @@ var tone_analyzer = new ToneAnalyzerV3({
   version_date: '2016-05-19'
 });
 
-
 //var params = {screen_name: '_TweetRecruiter'};
-client.get('favorites/list', function(error, tweets, response) {
-  if(error) throw error;
-  console.log(tweets);  // The favorites. 
-  console.log(response);  // Raw response object. 
+var params = {screen_name: 'seb_patron'};
+client.get('statuses/user_timeline', params, function(error, tweets, response) {
+  if (!error) {
+    var toBeParesed = JSON.stringify(tweets, null, 2);
+    JSON.parse(toBeParesed, (key, value) => {
+        if (key == 'text') {
+          //console.log(value);
+          tweetArray.push(value);
+            tone_analyzer.tone(textToCheck,
+            function(err, tone) {
+              if (err)
+                console.log(err);
+              else
+                //console.log(JSON.stringify(tone, null, 2));
+                analysis = JSON.stringify(tone, null, 2);
+                pushJSONToArray(analysis);
+            });
+        }
+    })
+  }
 });
 
-tone_analyzer.tone(textToCheck,
-  function(err, tone) {
-    if (err)
-      console.log(err);
-    else
-      //console.log(JSON.stringify(tone, null, 2));
-      analysis = JSON.stringify(tone, null, 2);
-      pushJSONToArray(analysis);
-});
+// tone_analyzer.tone(textToCheck,
+//   function(err, tone) {
+//     if (err)
+//       console.log(err);
+//     else
+//       //console.log(JSON.stringify(tone, null, 2));
+//       analysis = JSON.stringify(tone, null, 2);
+//       pushJSONToArray(analysis);
+// });
 
 function pushJSONToArray(jsonObj) {
     const tempArray = [];
@@ -63,34 +79,20 @@ function pushJSONToArray(jsonObj) {
           results.push(value);
         }
     })
-    //console.log(results);
     checkScores(results, jsonObj);
-
-    // results.forEach((value) => {
-    //   console.log("Watson says: " + value + "!\n");
-    // })
 }
 
 function checkScores(results, jsonObj) {
   const text = JSON.stringify(textToCheck.text, null, 2);
   const tempArray = [];
   if (results[TENTATIVE] > .7 ) {
-    // JSON.parse(text, (key, value) => {
-    //     if (key == 'score') {
-    //       tempArray.push(value);
-    //     }
-    //     console.log(tempArray)
-    //     console.log(results[TENTATIVE]);
-    // })
     keywords.forEach(word => {
       if (text.includes(word)) {
-        console.log("Success!")
+        console.log(results[TENTATIVE]);
         startChat();
       }
     })
-    // console.log(jsonObj);
   }
-  //console.log(results);
 }
 
 function startChat() {
