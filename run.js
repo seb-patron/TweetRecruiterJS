@@ -22,7 +22,7 @@ var Twitter = require('twitter');
  
 var client = new Twitter({
   consumer_key: 'ialOm7LL47LFjLcOKUlHeQFTc',
-  consumer_secret: ' mJirvzmoZbKzNMl4EjhZsFsrzW2viqw1nor5hyjkhVwIrOuLWI',
+  consumer_secret: 'mJirvzmoZbKzNMl4EjhZsFsrzW2viqw1nor5hyjkhVwIrOuLWI',
   access_token_key: '820148009379868673-q5WS8P2ccAvLu0A9OOdKFeYm5Crz5T1',
   access_token_secret: 'yL4KOKYzvM6c6J5dCqrOXbGhZZh1bZeXBdV4pQhpgy3Xb'
 });
@@ -38,6 +38,14 @@ var tone_analyzer = new ToneAnalyzerV3({
   version_date: '2016-05-19'
 });
 
+
+//var params = {screen_name: '_TweetRecruiter'};
+client.get('favorites/list', function(error, tweets, response) {
+  if(error) throw error;
+  console.log(tweets);  // The favorites. 
+  console.log(response);  // Raw response object. 
+});
+
 tone_analyzer.tone(textToCheck,
   function(err, tone) {
     if (err)
@@ -45,7 +53,6 @@ tone_analyzer.tone(textToCheck,
     else
       //console.log(JSON.stringify(tone, null, 2));
       analysis = JSON.stringify(tone, null, 2);
-      console.log(analysis);
       pushJSONToArray(analysis);
 });
 
