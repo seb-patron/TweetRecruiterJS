@@ -21,10 +21,10 @@ const AGREEABLENESS = 11;
 var Twitter = require('twitter');
  
 var client = new Twitter({
-  consumer_key: '',
-  consumer_secret: '',
-  access_token_key: '',
-  access_token_secret: ''
+  consumer_key: 'ialOm7LL47LFjLcOKUlHeQFTc',
+  consumer_secret: ' mJirvzmoZbKzNMl4EjhZsFsrzW2viqw1nor5hyjkhVwIrOuLWI',
+  access_token_key: '820148009379868673-q5WS8P2ccAvLu0A9OOdKFeYm5Crz5T1',
+  access_token_secret: 'yL4KOKYzvM6c6J5dCqrOXbGhZZh1bZeXBdV4pQhpgy3Xb'
 });
 
 var textToCheck =  {
@@ -78,9 +78,14 @@ function checkScores(results, jsonObj) {
     keywords.forEach(word => {
       if (text.includes(word)) {
         console.log("Success!")
+        startChat();
       }
     })
     // console.log(jsonObj);
   }
   //console.log(results);
+}
+
+function startChat() {
+  console.log("start chat called");
 }
