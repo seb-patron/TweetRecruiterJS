@@ -2,7 +2,18 @@ const ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
 //const jsonArray[];
 let analysis;
 const results = [];
+const ANGER = 0;
+const DISGUST = 1;
+const FEAR = 2;
+const JOY = 3;
+const SADNESS = 4;
+const ANALYTIC = 5;
+const CONFIDENTIAL = 6;
 const TENTATIVE = 7;
+const OPENNESS = 8;
+const CONSCIENTIOUSNESS = 9;
+const EXTRAVERSION = 10;
+const AGREEABLENESS = 11;
 
 var tone_analyzer = new ToneAnalyzerV3({
   username: 'fe96bc9f-d712-4c0e-abd1-9d1d6cc4c98d',
