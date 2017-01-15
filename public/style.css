@@ -1,6 +1,6 @@
     html {
       box-sizing: border-box;
-      background:#2a3f7e;
+      background:darkorange;
       font-family:'helvetica neue';
       font-size: 20px;
       font-weight: 200;
@@ -11,6 +11,12 @@
     input {
       width: 100%;
       padding:20px;
+    }
+
+    .image-tag {
+    display: block;
+    margin: auto;
+      margin:50px auto;
     }
 
     .search-form {
@@ -26,7 +32,7 @@
       width: 120%;
       left: -10%;
       position: relative;
-      top: 400px;
+      top: 100px;
       z-index: 2;
       border-radius: 5px;
       font-size: 40px;
