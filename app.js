@@ -80,7 +80,6 @@ function processWatson(tweetArray) {
         }
 
         tweet = tweet.slice(0, tweet.length/2) + "." + tweet.slice(tweet.length/2);
-        //console.log(tweet);
         tone_analyzer.tone({ text: tweet }, function(err, data) {
             if (err){
                 console.log(err);
