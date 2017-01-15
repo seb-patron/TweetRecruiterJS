@@ -2,8 +2,7 @@ const ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
 //const jsonArray[];
 let analysis;
 const keywords = ['job', 'jobs', 'searching', 'internship', 'intern', 'work',
-  'opennings', '?'
-];
+  'opennings', '?', 'programming'];
 const tweetArray = [];
 const results = [];
 const ANGER = 0;
@@ -40,20 +39,20 @@ var tone_analyzer = new ToneAnalyzerV3({
 });
 
 //var params = {screen_name: '_TweetRecruiter'};
-var params = {screen_name: 'hackseb'};
+var params = {screen_name: 'hackseb', count: 10};
 client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
     var toBeParesed = JSON.stringify(tweets, null, 2);
     JSON.parse(toBeParesed, (key, value) => {
         if (key == 'text') {
-          console.log(value);
+          //console.log(value);
           tweetArray.push(value);
           // console.log(tweetArray)
         }
         //}
     })
 
-    console.log(tweetArray);
+    //console.log(tweetArray);
     goThruEachTweet(tweetArray);
 
       // tweetArray.forEach(value => {
@@ -74,7 +73,7 @@ function goThruEachTweet(array) {
   console.log("array");
   array.forEach(value => {
     var toStr = value;
-    console.log(toStr);
+    //console.log(toStr);
     // var str = "{ text: " + toStr + " }";
     // console.log(str);
 
@@ -83,7 +82,7 @@ function goThruEachTweet(array) {
 
     var str = '{"text": "' + toStr + '" }';
     var json = JSON.parse(str);
-    console.log(json);
+    //console.log(json);
 
 
     tone_analyzer.tone(json,
@@ -93,9 +92,9 @@ function goThruEachTweet(array) {
         else
           //console.log(JSON.stringify(tone, null, 2));
           var score = JSON.stringify(tone, null, 2);
-          console.log("THIS THING WORKS");
-          console.log(score);
-          //pushJSONToArray(analysis);
+          //console.log("THIS THING WORKS");
+          // console.log(score);
+          pushJSONToArray(score);
       });
     });
 }
@@ -111,28 +110,48 @@ function goThruEachTweet(array) {
 // });
 
 function pushJSONToArray(jsonObj) {
-    const tempArray = [];
+    //const tempArray = [];
     JSON.parse(jsonObj, (key, value) => {
         if (key == 'score') {
           results.push(value);
         }
     })
+    //console.log(results);
     checkScores(results, jsonObj);
 }
 
 function checkScores(results, jsonObj) {
-  const text = JSON.stringify(jsonObj, null, 2);
-  const tempArray = [];
-  if (results[TENTATIVE] > .7 ) {
-    keywords.forEach(word => {
-      if (text.includes(word)) {
-        console.log(results[TENTATIVE]);
-        startChat();
-      }
+  // const text = JSON.stringify(jsonObj, null, 2);
+  // //console.log(text);
+  // //const tempArray = [];
+  // if (results[10] > .1 ) {
+  //   keywords.forEach(word => {
+  //     if (text.includes(word)) {
+  //       console.log(results[TENTATIVE]);
+  //       startChat();
+  //     }
+  //   })
+  // }
+
+
+      JSON.parse(jsonObj, (key, value) => {
+        if (key == 'text') {
+          console.log(value);
+          keywords.forEach(word => {
+            //console.log(word);
+            if (value.includes(word)) {
+              console.log(value);
+              startChat();
+            }
+          })
+        }
     })
-  }
+
+  
+
+
 }
 
 function startChat() {
-  console.log("start chat called");
+  console.log("GET THIS PATRIOT A COAT");
 }
