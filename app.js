@@ -1,4 +1,5 @@
 const ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
+const readline = require('readline');
 //const jsonArray[];
 let analysis;
 const keywords = ['job', 'jobs', 'searching', 'internship', 'intern', 'work',
@@ -27,8 +28,8 @@ const EMOTIONAL_RANGE = 12;
 
 const numberEmotions = 12;
 
-const CLIENT_NAME = 'hackseb';
-const AT_CLIENT_NAME = '@' + CLIENT_NAME;
+var CLIENT_NAME;
+var AT_CLIENT_NAME;
 const NUMBER_OF_TWEETS_TO_RETRIEVE = 10;
 
 const Twitter = require('twitter');
@@ -51,23 +52,42 @@ var tone_analyzer = new ToneAnalyzerV3({
   version_date: '2016-05-19'
 });
 
+
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+rl.question('What is your twitter handle? Do not include the @ symbol: ', (answer) => {
+  // TODO: Log the answer in a database
+  console.log(`Ok: ${answer}, prepare to have your account scanned`);
+  CLIENT_NAME = answer;
+  AT_CLIENT_NAME = '@' + CLIENT_NAME;
+  rl.close();
+  beginReadingTweets();
+});
+
+
 //var params = {screen_name: '_TweetRecruiter'};
 var params = {screen_name: CLIENT_NAME, count: NUMBER_OF_TWEETS_TO_RETRIEVE};
-client.get('statuses/user_timeline', params, function(error, tweets, response) {
-  if (!error) {
-      console.log("Get tweets accessed");
-    var json = JSON.stringify(tweets, null, 2);
-    //console.log(json);
-    JSON.parse(json, (key, value) => {
-        if (key == 'text') {
-            let returnedValue = sanitize(value);
-            tweetArray.push(returnedValue);
-          // console.log(tweetArray)
+function beginReadingTweets() {
+    client.get('statuses/user_timeline', params, function(error, tweets, response) {
+        if (!error) {
+            console.log("Get tweets accessed");
+            var json = JSON.stringify(tweets, null, 2);
+            //console.log(json);
+            JSON.parse(json, (key, value) => {
+                if (key == 'text') {
+                    let returnedValue = sanitize(value);
+                    tweetArray.push(returnedValue);
+                // console.log(tweetArray)
+                }
+            });
         }
-    })
-    }
-      processWatson(tweetArray);
-});
+        processWatson(tweetArray);
+    });
+}
 
 function sanitize(text) {
     var newText = text;
