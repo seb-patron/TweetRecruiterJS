@@ -2,7 +2,7 @@ const ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
 //const jsonArray[];
 let analysis;
 const keywords = ['job', 'jobs', 'searching', 'internship', 'intern', 'work',
-  'opennings', '?', 'programming'];
+  'opennings', '?', 'programming', 'employment'];
 const tweetArray = [];
 const results = [];
 const ANGER = 0;
@@ -18,7 +18,10 @@ const CONSCIENTIOUSNESS = 9;
 const EXTRAVERSION = 10;
 const AGREEABLENESS = 11;
 
-var Twitter = require('twitter');
+const CLIENT_NAME = 'penguinsawce';
+const NUMBER_OF_TWEETS_TO_RETRIEVE = 5;
+
+const Twitter = require('twitter');
  
 var client = new Twitter({
   consumer_key: 'ialOm7LL47LFjLcOKUlHeQFTc',
@@ -39,85 +42,65 @@ var tone_analyzer = new ToneAnalyzerV3({
 });
 
 //var params = {screen_name: '_TweetRecruiter'};
-var params = {screen_name: 'hackseb', count: 10};
+var params = {screen_name: CLIENT_NAME, count: NUMBER_OF_TWEETS_TO_RETRIEVE};
 client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
     var toBeParesed = JSON.stringify(tweets, null, 2);
     JSON.parse(toBeParesed, (key, value) => {
         if (key == 'text') {
-          //console.log(value);
+          console.log(toBeParesed);
           tweetArray.push(value);
           // console.log(tweetArray)
         }
         //}
     })
-
-    //console.log(tweetArray);
+    console.log(tweetArray);
     goThruEachTweet(tweetArray);
-
-      // tweetArray.forEach(value => {
-      // tone_analyzer.tone(value,
-      //   function(err, tone) {
-      //     if (err)
-      //       console.log(err);
-      //     else
-      //       //console.log(JSON.stringify(tone, null, 2));
-      //       analysis = JSON.stringify(tone, null, 2);
-      //       pushJSONToArray(analysis);
-      //   });
-      // });
   }
 });
 
 function goThruEachTweet(array) {
   console.log("array");
   array.forEach(value => {
+    //parse each text string in the array and convert to 
+    //JSON Object
     var toStr = value;
-    //console.log(toStr);
-    // var str = "{ text: " + toStr + " }";
-    // console.log(str);
-
-    // var json = JSON.stringify( str );
-    // console.log(json);
-
     var str = '{"text": "' + toStr + '" }';
     var json = JSON.parse(str);
-    //console.log(json);
 
-
+    //Take each newly created JSON Object and analyze with watson
     tone_analyzer.tone(json,
       function(err, tone) {
         if (err)
           console.log(err);
         else
-          //console.log(JSON.stringify(tone, null, 2));
+          console.log(JSON.stringify(tone, null, 2));
           var score = JSON.stringify(tone, null, 2);
-          //console.log("THIS THING WORKS");
-          // console.log(score);
           pushJSONToArray(score);
       });
     });
 }
 
-// tone_analyzer.tone(textToCheck,
-//   function(err, tone) {
-//     if (err)
-//       console.log(err);
-//     else
-//       //console.log(JSON.stringify(tone, null, 2));
-//       analysis = JSON.stringify(tone, null, 2);
-//       pushJSONToArray(analysis);
-// });
 
 function pushJSONToArray(jsonObj) {
-    //const tempArray = [];
+    const scoreArr = [];
+    const textArr = [];
     JSON.parse(jsonObj, (key, value) => {
         if (key == 'score') {
-          results.push(value);
+          scoreArr.push(value);
+        }
+        if (key == 'text') {
+          textArr.push(value);
         }
     })
-    //console.log(results);
-    checkScores(results, jsonObj);
+    // console.log({scoreArr, textArr})
+    // console.log()
+    // console.log()
+    // console.log("New iteration");
+    // console.log()
+    // console.log()
+    
+    //checkScores(scoreArr, textArr);
 }
 
 function checkScores(results, jsonObj) {
@@ -133,6 +116,8 @@ function checkScores(results, jsonObj) {
   //   })
   // }
 
+  console.log(results[23]);
+
 
       JSON.parse(jsonObj, (key, value) => {
         if (key == 'text') {
@@ -140,8 +125,10 @@ function checkScores(results, jsonObj) {
           keywords.forEach(word => {
             //console.log(word);
             if (value.includes(word)) {
-              console.log(value);
-              startChat();
+              if (results[TENTATIVE]) {
+                 console.log(value);
+                  startChat();
+              }
             }
           })
         }
