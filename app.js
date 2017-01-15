@@ -85,7 +85,7 @@ function processWatson(tweetArray) {
             if (err){
                 console.log(err);
             } else { 
-                console.log(JSON.stringify(data, null, 2));
+                //console.log(JSON.stringify(data, null, 2));
                 //console.log();
                 checkScoreAndTextContent(JSON.stringify(data, null, 2));
             }
@@ -103,7 +103,7 @@ function checkScoreAndTextContent(json) {
 
             //check to see of text contains keyword
             keywords.forEach(word => {
-                console.log(word);
+                //console.log(word);
                 if (value.includes(word)) {
                     console.log("WE HAVE A MATCH!!");
                     keywordMatch = true;
@@ -120,7 +120,6 @@ function checkScoreAndTextContent(json) {
                     scoreArr.push(value);
                 }
             })
-            console.log(scoreArr[SADNESS]);
             if (scoreArr[TENTATIVE] > .6 ) {
                 toneMatch = true;
             } else if (scoreArr[SADNESS] > .5 ) {
@@ -141,78 +140,3 @@ function checkScoreAndTextContent(json) {
 function startChat() {
     console.log("GET THIS MAN A COAT!")
 }
-
-
-
-
-// function goThruEachTweet(array) {
-//   console.log("array");
-//   array.forEach(value => {
-//     //parse each text string in the array and convert to 
-//     //JSON Object
-//     var toStr = value;
-//     var str = '{"text": "' + toStr + '" }';
-//     var json = JSON.parse(str);
-
-//     //Take each newly created JSON Object and analyze with watson
-//     // tone_analyzer.tone(json,
-//     //   function(err, tone) {
-//     //     if (err)
-//     //       console.log(err);
-//     //     else
-//     //       console.log(JSON.stringify(tone, null, 2));
-//     //       var score = JSON.stringify(tone, null, 2);
-//     //       pushJSONToArray(score);
-//     //   });
-//     });
-// }
-
-
-// function pushJSONToArray(jsonObj) {
-//     const scoreArr = [];
-//     const textArr = [];
-//     JSON.parse(jsonObj, (key, value) => {
-//         if (key == 'score') {
-//           scoreArr.push(value);
-//         }
-//         if (key == 'text') {
-//           textArr.push(value);
-//         }
-//     })
-//     // console.log({scoreArr, textArr})
-//     // console.log()
-//     // console.log()
-//     // console.log("New iteration");
-//     // console.log()
-//     // console.log()
-    
-//     //checkScores(scoreArr, textArr);
-// }
-
-// function checkScores(results, jsonObj) {
-//   console.log(results[23]);
-
-
-//       JSON.parse(jsonObj, (key, value) => {
-//         if (key == 'text') {
-//           console.log(value);
-//           keywords.forEach(word => {
-//             //console.log(word);
-//             if (value.includes(word)) {
-//               if (results[TENTATIVE]) {
-//                  console.log(value);
-//                   startChat();
-//               }
-//             }
-//           })
-//         }
-//     })
-
-  
-
-
-// }
-
-// function startChat() {
-//   console.log("GET THIS PATRIOT A COAT");
-// }
