@@ -40,27 +40,65 @@ var tone_analyzer = new ToneAnalyzerV3({
 });
 
 //var params = {screen_name: '_TweetRecruiter'};
-var params = {screen_name: 'seb_patron'};
+var params = {screen_name: 'hackseb'};
 client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
     var toBeParesed = JSON.stringify(tweets, null, 2);
     JSON.parse(toBeParesed, (key, value) => {
         if (key == 'text') {
-          //console.log(value);
+          console.log(value);
           tweetArray.push(value);
-            tone_analyzer.tone(textToCheck,
-            function(err, tone) {
-              if (err)
-                console.log(err);
-              else
-                //console.log(JSON.stringify(tone, null, 2));
-                analysis = JSON.stringify(tone, null, 2);
-                pushJSONToArray(analysis);
-            });
+          // console.log(tweetArray)
         }
+        //}
     })
+
+    console.log(tweetArray);
+    goThruEachTweet(tweetArray);
+
+      // tweetArray.forEach(value => {
+      // tone_analyzer.tone(value,
+      //   function(err, tone) {
+      //     if (err)
+      //       console.log(err);
+      //     else
+      //       //console.log(JSON.stringify(tone, null, 2));
+      //       analysis = JSON.stringify(tone, null, 2);
+      //       pushJSONToArray(analysis);
+      //   });
+      // });
   }
 });
+
+function goThruEachTweet(array) {
+  console.log("array");
+  array.forEach(value => {
+    var toStr = value;
+    console.log(toStr);
+    // var str = "{ text: " + toStr + " }";
+    // console.log(str);
+
+    // var json = JSON.stringify( str );
+    // console.log(json);
+
+    var str = '{"text": "' + toStr + '" }';
+    var json = JSON.parse(str);
+    console.log(json);
+
+
+    tone_analyzer.tone(json,
+      function(err, tone) {
+        if (err)
+          console.log(err);
+        else
+          //console.log(JSON.stringify(tone, null, 2));
+          var score = JSON.stringify(tone, null, 2);
+          console.log("THIS THING WORKS");
+          console.log(score);
+          //pushJSONToArray(analysis);
+      });
+    });
+}
 
 // tone_analyzer.tone(textToCheck,
 //   function(err, tone) {
@@ -83,7 +121,7 @@ function pushJSONToArray(jsonObj) {
 }
 
 function checkScores(results, jsonObj) {
-  const text = JSON.stringify(textToCheck.text, null, 2);
+  const text = JSON.stringify(jsonObj, null, 2);
   const tempArray = [];
   if (results[TENTATIVE] > .7 ) {
     keywords.forEach(word => {
