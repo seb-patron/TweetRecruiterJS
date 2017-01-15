@@ -1,5 +1,10 @@
 Olivia
 Radix
-Watson/IBM
-Microsoft
+IBM/Watson
+Microsoft (Diversity and Inclusion)
 State Farm
+Domain.com
+
+HackArizona Categories:
+Beginner Hack
+Community
