@@ -52,13 +52,42 @@ var tone_analyzer = new ToneAnalyzerV3({
   version_date: '2016-05-19'
 });
 
+/*
+//Brand new runs a website at same time a test
+*/
+
+const http = require('http');
+const fs = require('fs');
+const server = http.createServer(function (req, res) {
+    displayForm(res);
+});
+
+function displayForm(res) {
+    fs.readFile('form.html', function (err, data) {
+        res.writeHead(200, {
+            'Content-Type': 'text/html',
+                'Content-Length': data.length
+        });
+        res.write(data);
+        res.end();
+    });
+}
+
+server.listen(8000);
+console.log("server listening on 8000");
+
+/*
+//End of web server test
+*/
 
 
+//Creates command line reader
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
+//Actual Program start
 rl.question('What is your twitter handle? Do not include the @ symbol: ', (answer) => {
   // TODO: Log the answer in a database
   console.log(`Ok: ${answer}, prepare to have your account scanned`);
@@ -171,7 +200,7 @@ function startChat() {
 
 
 function tweetAtPotentialJobSearcher() {
-    let jobPrompt =  'Hey ' + AT_CLIENT_NAME + ', it sounds like you may be looking for a job? Need help?'
+    let jobPrompt =  'Hey ' + AT_CLIENT_NAME + ', it sounds like you are looking for a job? Need help?'
     client.post('statuses/update', {status: jobPrompt},  function(error, tweet, response) {
         if(error) {
             // throw error;
