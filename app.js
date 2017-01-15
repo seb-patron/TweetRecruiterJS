@@ -40,10 +40,10 @@ var client = new Twitter({
   access_token_secret: 'yL4KOKYzvM6c6J5dCqrOXbGhZZh1bZeXBdV4pQhpgy3Xb'
 });
 
-var textToCheck =  {
-  "text": "Anyone know of programming jobs this summer?"
+// var textToCheck =  {
+//   "text": "Anyone know of programming jobs this summer?"
 
-}
+// }
 
 var tone_analyzer = new ToneAnalyzerV3({
   username: 'fe96bc9f-d712-4c0e-abd1-9d1d6cc4c98d',
@@ -151,7 +151,7 @@ function startChat() {
 
 
 function tweetAtPotentialJobSearcher() {
-    let jobPrompt =  'Hey ' + AT_CLIENT_NAME + ', it sounds like you may be looking for a job? Is that true?'
+    let jobPrompt =  'Hey ' + AT_CLIENT_NAME + ', it sounds like you may be looking for a job? Need help?'
     client.post('statuses/update', {status: jobPrompt},  function(error, tweet, response) {
         if(error) {
             // throw error;
