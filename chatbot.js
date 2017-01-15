@@ -1,80 +1,79 @@
+
 console.log('The responding bot is starting');
 
 var Twit = require('twit');
 
-const config = require('./config');
-const T = new Twit(config);
+var config = require('./config');
+var T = new Twit(config);
 
-
-const greetings = ["Hi " + tweetBotID + " ,my name is JobChirp. We realized you may be looking for employment, would you like our help?", "Hey " + tweetBotID + 
-                ", this is Job Chirp. We had a feeling you were looking for a job, would you like our help?"];
-const yes_to_greeting = ["Thats great to here! Lets get started. Whats your legal first and last name?", "Awesome! Whats your legal first and last name?"];
-const yes = ["yes please", 'yes!', 'YES!', "Of course!", 'yes'];
-const age = ["Cool! What is your legal date of birth?", "Perfect, lets move on. What is your legal date of birth?"];
-const programming_language = ["What programming languages do you know?", "What coding languages do you know?"];
-const no_to_greeting = ["This is embarrassing! Sorry and have a nice day" + tweetBotID + ".", "Our apologies, have a great day, " + tweetBotID];
-const no = ["no thank you", "nah", "no", "go away"];
-let counter = 0;
-
-const USER_NAME = 'penguinsawce';
 // Setting up a user stream
-const stream = T.stream('user');
+var stream = T.stream('user');
 // Anytime someone follows me
 stream.on('tweet', tweetEvent);
-
-function getTwitterEventMessage(eventMsg) {
-    return eventMsg;
-}
-
+var counter = 0;
 
 function tweetEvent(eventMsg) {
   var replyto = eventMsg.in_reply_to_screen_name;
-  var text = eventMsg.text;
-  const tweetBotID = eventMsg.user.screen_name;
-//   var random_val = randomNumber(0,1);
-  var clientName;
-  var clientAGE;
-  var PL;
-
-	if ((replyto == USER_NAME) && (counter == 0)) {
-		console.log("0th if" + counter);
-		var newtweet = '@' + tweetBotID + " " +  greetings[random_val];
-		tweetIt(newtweet);	
+  var text;
+  var from = eventMsg.user.screen_name;
+  var replytostatusid = eventMsg.id_str;
+  var greetings = ["Hi " + from + " ,my name is JobChirp. We realized you may be looking for employment, would you like our help?", "Hey " + from + 
+  					", this is Job Chirp. We had a feeling you were looking for a job, would you like our help?"];
+  var yes_to_greeting = ["Thats great to here! Lets get started. Whats your legal first and last name?", "Awesome! Whats your legal first and last name?"];
+  var age = ["Cool! What is your legal date of birth?", "Perfect, lets move on. What is your legal date of birth?"];
+  var programming_language = ["What programming languages do you know?", "What coding languages do you know?"];
+  var no_to_greeting = ["This is embarrassing! Sorry and have a nice day" + from + ".", "Our apologies, have a great day, " + from];
+  const yes = ["yes", 'yes!', 'YES!', "Of course!", 'yes please'];
+  const no = ["no thank you", "nah", "no", "go away"];
+  var random_val = randomNumber(0,1);
+  var USER = 'penguinsawce';
+  var response;
+	
+	if (replyto==USER && counter==0) {
+		console.log(counter);
+		var newtweet = '@' + from + " " +  greetings[random_val];
+		tweetIt(newtweet, replytostatusid);	
+		response = eventMsg.text;
 	}
-	else if((replyto == USER_NAME) && (includesWord(text,yes) && counter==1))
+	
+	else if(includesWord(response,yes) && counter==1)
 	{
-		console.log("1th if" + counter);
-		var newtweet1 = '@' + tweetBotID + " " +  yes_to_greeting[random_val];
-		tweetIt(newtweet1);
+		console.log(counter);
+		var newtweet1 = '@' + from + " " +  yes_to_greeting[random_val];
+		tweetIt(newtweet1, replytostatusid);
+		response = eventMsg.text;
 	}
 
-	else if(replyto == USER_NAME && includesWord(text,no) && counter==2)
+	else if(includesWord(text,no) && counter==2)
 	{
-		console.log("2nd if" + counter);
-		var newtweet2 = '@' + tweetBotID + " " +  no_to_greeting[random_val];
-		tweetIt(newtweet2);  
+		console.log(counter);
+		var newtweet2 = '@' + from + " " +  no_to_greeting[random_val];
+		tweetIt(newtweet2 , replytostatusid); 
+		response = eventMsg.text; 
 	}  		
-  	else if(replyto=='penguinsawce' && counter==3)
+  	else if(replyto==USER && counter==3)
   	{
-		console.log("3rd if" + counter)
-		var newtweet3 = '@' + tweetBotID + " " +  age[random_val];
-  		tweetIt(newtweet3); 
-  		clientAGE = text;
+		console.log(counter);
+		var newtweet3 = '@' + from + " " +  age[random_val];
+  		tweetIt(newtweet3, replytostatusid); 
+  		response = eventMsg.text;
   	}
-  	else if(replyto=='penguinsawce' && counter==4)
+  	else if(counter==4)
   	{
-		console.log("4th if" + counter)
-		var newtweet4 = '@' + tweetBotID + " " +  programming_language[random_val];
-  		tweetIt(newtweet4); 
-  		PL = text; 
+		console.log(counter)
+		var newtweet4 = '@' + from + " " +  programming_language[random_val];
+  		tweetIt(newtweet4, replytostatusid); 
+  		response = eventMsg.text;
   	}
-  	else if(replyto=='penguinsawce' && counter==5)
+  	else if(replyto==USER && counter==5)
   	{
-		console.log("5th if" + counter)
-		var newtweet5 = '@' + tweetBotID + " " +  "Thank you! Have a great a day!";
-  		tweetIt(newtweet5);  	
+		console.log(counter);
+		var newtweet5 = '@' + from + " " +  "Thank you! Have a great a day!";
+  		tweetIt(newtweet5, replytostatusid);
+  		response = eventMsg.text;  	
   	}
-  	counter += 1;
+  	counter = counter + 1;
+
 }
 
 function includesWord(word, list)
@@ -96,19 +95,20 @@ function randomNumber(min,max)
 }
 
 
-function tweetIt(txt) {
+function tweetIt(txt, responseId) {
 
 	var tweet = {
-	  status: txt
+	  status: txt,
+	  in_reply_to_status_id: responseId
 	}
 
 	T.post('statuses/update', tweet, tweeted);
 
 	function tweeted(err, data, response) {
 	  if (err) {
-	  	console.log("Something went wrong!");
+	  	console.log("Something went wrong!", err);
 	  } else {
-	    console.log("It worked!");
+	   console.log("It worked!");
 	  }
 	}
 }
